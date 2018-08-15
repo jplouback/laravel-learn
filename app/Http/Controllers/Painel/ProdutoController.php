@@ -93,6 +93,9 @@ class ProdutoController extends Controller
         // Pega todos os campos do formulário
         $dataForm = $request->all();
 
+        $dataForm['active'] = ( !isset($dataForm['active']) ) ? 0 : 1;
+
+
         // Faz o Cadastro
         $insert = $this->produto->create($dataForm);
 
