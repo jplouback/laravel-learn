@@ -20,6 +20,7 @@
         <table class="table table-striped">
             <tr>
                 <th>Nome</th>
+                <th>Número</th>
                 <th>Descrição</th>
                 <th width="20%" class="text-center">Ações</th>
             </tr>
@@ -27,6 +28,7 @@
             @foreach($produtos as $produto)
                 <tr>
                     <td>{{$produto->name}}</td>
+                    <td>{{$produto->number}}</td>
                     <td>{{$produto->description}}</td>
                     <td class="text-center">
                         <a href="#" title="Editar" class="btn btn-sm btn-danger"><i class="fas fa-edit"></i> Editar</a>

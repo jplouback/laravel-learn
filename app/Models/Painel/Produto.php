@@ -15,4 +15,9 @@ class Produto extends Model
     ];
 
     protected $guarded = ['admin'];
+
+
+
+
+
 }

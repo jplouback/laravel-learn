@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Painel;
 
+use App\Http\Requests\Painel\ProductFormRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Painel\Produto;
+
+
 
 class ProdutoController extends Controller
 {
@@ -14,6 +17,7 @@ class ProdutoController extends Controller
     public function __construct(Produto $produto)
     {
         $this->produto = $produto;
+
     }
 
     /**
@@ -87,13 +91,17 @@ class ProdutoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductFormRequest $request)
     {
 
         // Pega todos os campos do formulário
         $dataForm = $request->all();
 
         $dataForm['active'] = ( !isset($dataForm['active']) ) ? 0 : 1;
+
+
+//        // Validação
+//        $this->validate($request, $this->produto->rules, $this->produto->mensagens);
 
 
         // Faz o Cadastro

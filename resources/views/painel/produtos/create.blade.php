@@ -4,6 +4,17 @@
 
     <div class="container">
         <h1 class="mb-5">Cadastro de Produto</h1>
+
+        {{--@if( isset($errors) && count($errors) > 0 )--}}
+
+            {{--@foreach( $errors->all() as $error )--}}
+                {{--<div class="alert alert-danger" role="alert">--}}
+                    {{--{{$error}}--}}
+                {{--</div>--}}
+            {{--@endforeach--}}
+
+        {{--@endif--}}
+
         <form class="needs-validation" novalidate method="post" action="{{route('produtos.store')}}">
             {{--<input type="hidden" name="id" value="">--}}
 
@@ -14,12 +25,29 @@
 
                 <div class="col-md-4 mb-3">
                     <label for="name">Nome do Produto</label>
-                    <input type="text" name="name" class="form-control" id="name" placeholder="Nome do Produto" value="" required>
+                    <input type="text" name="name" class="form-control" id="name" placeholder="Nome do Produto" value="{{old('name')}}" required>
+
+                    @if( $errors->get('name') )
+                        <div class="alert alert-danger" role="alert">
+                            @foreach( $errors->get('name') as $error )
+                                {{$error}}
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
 
                 <div class="col-md-4 mb-3">
                     <label for="numero">Número</label>
-                    <input type="text" name="number" class="form-control" id="numero" placeholder="Número" value="" required>
+                    <input type="text" name="number" class="form-control" id="numero" placeholder="Número" value="{{old('number')}}" required>
+
+                    @if( $errors->get('number') )
+                        <div class="alert alert-danger" role="alert">
+                            @foreach( $errors->get('number') as $error )
+                                {{$error}}
+                            @endforeach
+                        </div>
+                    @endif
+
                 </div>
 
                 <div class="col-md-4 mb-3">
@@ -40,15 +68,34 @@
                     <select class="custom-select" id="flagativo" name="category">
                         <option value="">Selecione uma categoria</option>
                         @foreach($categorias as $categoria)
-                            <option value="{{$categoria}}">{{$categoria}}</option>
+                            <option value="{{$categoria}}" {{old('category') == $categoria ? 'selected' : '' }} >{{$categoria}}</option>
                         @endforeach
                     </select>
+
+                    @if( $errors->get('category') )
+                        <div class="alert alert-danger" role="alert">
+                            @foreach( $errors->get('category') as $error )
+                                {{$error}}
+                            @endforeach
+                        </div>
+                    @endif
+
                 </div>
 
                 <div class="col-md-6 mb-3">
                     <label for="descricao">Descrição</label>
-                    <textarea name="description" class="form-control" id="descricao" rows="3"></textarea>
+                    <textarea name="description" class="form-control" id="descricao" rows="3">{{old('description')}}</textarea>
+
+                    @if( $errors->get('description') )
+                        <div class="alert alert-danger" role="alert">
+                            @foreach( $errors->get('description') as $error )
+                                {{$error}}
+                            @endforeach
+                        </div>
+                    @endif
+
                 </div>
+
             </div>
             <button class="btn btn-primary" type="submit">Adicionar</button>
         </form>
