@@ -31,7 +31,7 @@
                     <td>{{$produto->number}}</td>
                     <td>{{$produto->description}}</td>
                     <td class="text-center">
-                        <a href="#" title="Editar" class="btn btn-sm btn-danger"><i class="fas fa-edit"></i> Editar</a>
+                        <a href="{{route('produtos.edit', $produto->id)}}" title="Editar" class="btn btn-sm btn-danger"><i class="fas fa-edit"></i> Editar</a>
                         <a href="#" title="Deletar" class="btn btn-sm btn-info"><i class="fas fa-trash-alt"></i> Deletar</a>
                     </td>
                 </tr>

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Painel;
 
 use App\Http\Requests\Painel\ProductFormRequest;
-use Illuminate\Http\Request;
+//use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Painel\Produto;
 
@@ -82,7 +82,7 @@ class ProdutoController extends Controller
     {
         $title = 'Cadastrar novo Produto';
         $categorias = ['eletronicos', 'moveis', 'limpeza', 'banho'];
-        return view('painel.produtos.create', compact('title', 'categorias') );
+        return view('painel.produtos.create-edit', compact('title', 'categorias') );
     }
 
     /**
@@ -100,7 +100,7 @@ class ProdutoController extends Controller
         $dataForm['active'] = ( !isset($dataForm['active']) ) ? 0 : 1;
 
 
-//        // Validação
+//        // Validação (Agora está sendo feita pela injeção do ProductFormRequest
 //        $this->validate($request, $this->produto->rules, $this->produto->mensagens);
 
 
@@ -110,7 +110,7 @@ class ProdutoController extends Controller
         if ($insert) {
             return redirect()->route('produtos.index');
         } else {
-            return redirect()->route('produtos.create');
+            return redirect()->route('produtos.create-edit');
         }
 
     }
@@ -134,7 +134,14 @@ class ProdutoController extends Controller
      */
     public function edit($id)
     {
-        //
+        // Recuperando produto
+        $produto = $this->produto->find($id);
+
+        $title = "Editar Produto {$produto->name}";
+        $categorias = ['eletronicos', 'moveis', 'limpeza', 'banho'];
+
+        return view('painel.produtos.create-edit', compact('title', 'categorias', 'produto') );
+
     }
 
     /**
@@ -144,9 +151,24 @@ class ProdutoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProductFormRequest $request, $id)
     {
-        //
+        $dataForm = $request->all();
+
+        $dataForm['active'] = ( !isset($dataForm['active']) ) ? 0 : 1;
+
+        $produto = $this->produto->find($id);
+
+        $update = $produto->update($dataForm);
+
+        if ($update) {
+            return redirect()->route('produtos.edit', $id)->with('success','Cadastrado com sucesso!');
+        } else {
+            return route('protutos.edit', $id)->with([
+                'errors' => 'Falha ao editar'
+            ]);
+        }
+
     }
 
     /**

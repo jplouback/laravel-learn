@@ -15,7 +15,18 @@
 
         {{--@endif--}}
 
-        <form class="needs-validation" novalidate method="post" action="{{route('produtos.store')}}">
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if( isset($produto) )
+            <form class="needs-validation" novalidate method="post" action="{{ route('produtos.update', $produto->id) }}">
+                {!! method_field('PUT') !!}
+        @else
+            <form class="needs-validation" novalidate method="post" action="{{ route('produtos.store')}}">
+        @endif
             {{--<input type="hidden" name="id" value="">--}}
 
             {!! csrf_field() !!}
@@ -25,7 +36,7 @@
 
                 <div class="col-md-4 mb-3">
                     <label for="name">Nome do Produto</label>
-                    <input type="text" name="name" class="form-control" id="name" placeholder="Nome do Produto" value="{{old('name')}}" required>
+                    <input type="text" name="name" class="form-control" id="name" placeholder="Nome do Produto" value="{{ $produto->name or old('name')}}" required>
 
                     @if( $errors->get('name') )
                         <div class="alert alert-danger" role="alert">
@@ -38,7 +49,7 @@
 
                 <div class="col-md-4 mb-3">
                     <label for="numero">Número</label>
-                    <input type="text" name="number" class="form-control" id="numero" placeholder="Número" value="{{old('number')}}" required>
+                    <input type="text" name="number" class="form-control" id="numero" placeholder="Número" value="{{ $produto->number or old('number')}}" required>
 
                     @if( $errors->get('number') )
                         <div class="alert alert-danger" role="alert">
@@ -53,23 +64,29 @@
                 <div class="col-md-4 mb-3">
                     <br>
                     <div class="form-check mt-3">
-                        <input class="form-check-input" type="checkbox" name="active" value="1" id="flagativo">
+                        <input class="form-check-input" type="checkbox" name="active" value="1" id="flagativo" {{ (isset($produto->active) ? $produto->active : old('active') ) == 1 ? 'checked' : '' }}>
                         <label class="form-check-label" for="flagativo">
                             Ativo
                         </label>
                     </div>
+
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="col-md-6 mb-3">
                     <label for="category">Categoria</label>
+
                     {{--<input type="text" name="category" class="form-control" id="category" placeholder="Categoria">--}}
                     <select class="custom-select" id="flagativo" name="category">
                         <option value="">Selecione uma categoria</option>
+
                         @foreach($categorias as $categoria)
-                            <option value="{{$categoria}}" {{old('category') == $categoria ? 'selected' : '' }} >{{$categoria}}</option>
+                            <option value="{{$categoria}}" {{ (isset($produto->category) ? $produto->category : old('category') ) == $categoria ? 'selected' : '' }} >
+                                {{$categoria}}
+                            </option>
                         @endforeach
+
                     </select>
 
                     @if( $errors->get('category') )
@@ -84,7 +101,7 @@
 
                 <div class="col-md-6 mb-3">
                     <label for="descricao">Descrição</label>
-                    <textarea name="description" class="form-control" id="descricao" rows="3">{{old('description')}}</textarea>
+                    <textarea name="description" class="form-control" id="descricao" rows="3">{{ $produto->description or old('description')}}</textarea>
 
                     @if( $errors->get('description') )
                         <div class="alert alert-danger" role="alert">
@@ -97,7 +114,7 @@
                 </div>
 
             </div>
-            <button class="btn btn-primary" type="submit">Adicionar</button>
+            <button class="btn btn-primary" type="submit"> {{isset($produto) ? 'Editar Produto' : 'Adicionar Produto'}} </button>
         </form>
 
         <script>
