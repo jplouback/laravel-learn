@@ -13,6 +13,7 @@ class ProdutoController extends Controller
 {
 
     private  $produto;
+    private  $totalPage = 5;
 
     public function __construct(Produto $produto)
     {
@@ -28,7 +29,7 @@ class ProdutoController extends Controller
     public function index(Produto $produto)
     {
         $title = 'Página de Produtos';
-        $produtos = $this->produto->all();
+        $produtos = $this->produto->paginate($this->totalPage);
         return view('painel.produtos.index', compact('produtos', 'title'));
     }
 
@@ -123,7 +124,9 @@ class ProdutoController extends Controller
      */
     public function show($id)
     {
-        //
+        $produto = $this->produto->find($id);
+        $title = "Produto: {$produto->name}";
+        return view('painel.produtos.show', compact('title', 'produto') );
     }
 
     /**
@@ -179,6 +182,17 @@ class ProdutoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $produto = $this->produto->find($id);
+
+        $delete = $produto->delete();
+
+        if($delete) {
+            return redirect()->route('produtos.index')->with('success','Deletado com sucesso!');
+        } else {
+            return route('protutos.show', $id)->with([
+                'errors' => 'Falha ao deletar'
+            ]);
+        }
+
     }
 }
